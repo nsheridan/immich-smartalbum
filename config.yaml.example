@@ -1,0 +1,23 @@
+server: https://your-immich-server.example.com
+interval: 1h
+
+# Optional: log_level controls verbosity. Valid values: info (default), debug.
+log_level: info
+
+users:
+  - name: alice
+    api_key: your-api-key-here
+    albums:
+      - name: "Family"
+        # If specified, album_id finds the album by ID instead of looking it up by name.
+        # Required when the album is shared and owned by another user.
+        # Find the ID in the album's URL in the Immich web UI.
+        album_id: "abcdef-abcdef-0000"
+        people:
+          - Alice
+          - Bob
+          - Carol
+      - name: "Friends"  # Without album_id, the album is found by name.
+        people:
+          - Dan
+          - Dave
