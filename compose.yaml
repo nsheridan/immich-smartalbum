@@ -1,0 +1,6 @@
+services:
+  immich-smartalbum:
+    build: .
+    restart: unless-stopped
+    volumes:
+      - ./config.yaml:/config.yaml:ro
