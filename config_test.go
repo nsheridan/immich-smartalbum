@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func TestparseConfigConfig_valid(t *testing.T) {
+func TestParseConfigConfig_valid(t *testing.T) {
 	contents := strings.NewReader(`
 server: https://immich.example.com
 interval: 30m
@@ -37,7 +37,7 @@ users:
 	}
 }
 
-func TestLoadConfig_missingAPIKey(t *testing.T) {
+func TestParseConfig_missingAPIKey(t *testing.T) {
 	contents := strings.NewReader(`
 server: https://immich.example.com
 interval: 1h
@@ -53,7 +53,7 @@ users:
 	}
 }
 
-func TestLoadConfig_invalidInterval(t *testing.T) {
+func TestParseConfig_invalidInterval(t *testing.T) {
 	contents := strings.NewReader(`
 server: https://immich.example.com
 interval: notaduration
@@ -70,7 +70,7 @@ users:
 	}
 }
 
-func TestLoadConfig_albumNoPeople(t *testing.T) {
+func TestParseConfig_albumNoPeople(t *testing.T) {
 	contents := strings.NewReader(`
 server: https://immich.example.com
 interval: 1h
@@ -87,7 +87,7 @@ users:
 	}
 }
 
-func TestLoadConfig_missingServer(t *testing.T) {
+func TestParseConfig_missingServer(t *testing.T) {
 	contents := strings.NewReader(`
 interval: 1h
 users:
@@ -103,7 +103,7 @@ users:
 	}
 }
 
-func TestLoadConfig_noUsers(t *testing.T) {
+func TestParseConfig_noUsers(t *testing.T) {
 	contents := strings.NewReader(`
 server: https://immich.example.com
 interval: 1h
@@ -115,7 +115,7 @@ users: []
 	}
 }
 
-func TestLoadConfig_duplicateUserName(t *testing.T) {
+func TestParseConfig_duplicateUserName(t *testing.T) {
 	contents := strings.NewReader(`
 server: https://immich.example.com
 interval: 1h
@@ -137,7 +137,7 @@ users:
 	}
 }
 
-func TestLoadConfig_invalidLogLevel(t *testing.T) {
+func TestParseConfig_invalidLogLevel(t *testing.T) {
 	contents := strings.NewReader(`
 server: https://immich.example.com
 interval: 1h
@@ -155,7 +155,7 @@ users:
 	}
 }
 
-func TestLoadConfig_intervalTooShort(t *testing.T) {
+func TestParseConfig_intervalTooShort(t *testing.T) {
 	contents := strings.NewReader(`
 server: https://immich.example.com
 interval: 30s
