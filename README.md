@@ -51,7 +51,7 @@ immich-smartalbum -config /etc/immich-smartalbum/config.yaml
 
 The program is configured with a yaml file with the following structure:
 
-```
+```yaml
 # server: Your Immich server hostname
 server: https://your-immich-server.example.com
 # interval: How often to search for new photos, must be a valid Go duration.
