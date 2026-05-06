@@ -1,6 +1,7 @@
 services:
   immich-smartalbum:
-    build: .
+    image: ghcr.io/nsheridan/immich-smartalbum:latest
+    container_name: immich-smartalbum
     restart: unless-stopped
     volumes:
       - ./config.yaml:/config.yaml:ro

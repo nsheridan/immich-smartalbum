@@ -20,22 +20,24 @@ The API keys need the following permissions:
 
 ## Installation
 
-### Using `go`
+### Docker
+
+```
+docker run --rm -v $(pwd)/config.yaml:/config.yaml ghcr.io/nsheridan/immich-smartalbum:latest
+```
+
+Or with Docker Compose, copy [`compose.yaml`](compose.yaml) from this repo and run:
+
+```
+docker compose up -d
+```
+
+### Installation using `go` tools
 
 ```
 go install nsheridan.dev/immich-smartalbum@latest
 ```
 
-### Docker (local build)
-
-```
-docker build -t immich-smartalbum .
-docker run --rm -v $(pwd)/config.yaml:/config.yaml immich-smartalbum
-```
-
-## Usage
-
-Basic command-line usage:
 ```
 immich-smartalbum -h
 Usage of immich-smartalbum:
@@ -87,3 +89,31 @@ users:
 ```
 
 Note that you can specify multiple users, each with their own API key. 
+
+## Development
+
+### Running tests
+
+```
+go test ./...
+```
+
+### Running locally
+
+```
+go build .
+./immich-smartalbum [-config /path/to/config.yaml]
+```
+
+```
+docker build -t immich-smartalbum .
+docker run --rm -v $(pwd)/config.yaml:/config.yaml immich-smartalbum
+```
+
+Or with Docker Compose:
+
+```
+docker compose up
+```
+
+The `compose.override.yaml` will build the image locally instead of pulling.
