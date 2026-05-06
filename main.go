@@ -57,9 +57,8 @@ func run(cfg *config, clients []*immich.Client) {
 	results := make([]userResult, len(cfg.Users))
 	var wg sync.WaitGroup
 	for i, user := range cfg.Users {
-		i, user, client := i, user, clients[i]
 		wg.Go(func() {
-			results[i] = processUser(user, client)
+			results[i] = processUser(user, clients[i])
 		})
 	}
 	wg.Wait()
