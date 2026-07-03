@@ -23,7 +23,8 @@ type searchAssetsResponse struct {
 }
 
 type searchMetadataRequest struct {
-	PersonIDs []string `json:"personIds"`
+	PersonIDs []string `json:"personIds,omitempty"`
+	AlbumIDs  []string `json:"albumIds,omitempty"`
 	Page      int      `json:"page"`
 	Size      int      `json:"size"`
 }
@@ -31,11 +32,6 @@ type searchMetadataRequest struct {
 type Album struct {
 	ID        string `json:"id"`
 	AlbumName string `json:"albumName"`
-}
-
-type albumDetailResponse struct {
-	ID     string  `json:"id"`
-	Assets []asset `json:"assets"`
 }
 
 type createAlbumRequest struct {

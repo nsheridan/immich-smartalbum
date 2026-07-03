@@ -77,17 +77,14 @@ func (c *Client) ListPeople() ([]Person, error) {
 	return resp.People, nil
 }
 
-func (c *Client) SearchAssetsByPerson(personID string) ([]string, error) {
+func (c *Client) searchAssetIDs(filter searchMetadataRequest) ([]string, error) {
 	var ids []string
 	page := 1
 	for {
-		reqBody := searchMetadataRequest{
-			PersonIDs: []string{personID},
-			Page:      page,
-			Size:      1000,
-		}
+		filter.Page = page
+		filter.Size = 1000
 		body := &bytes.Buffer{}
-		if err := json.NewEncoder(body).Encode(reqBody); err != nil {
+		if err := json.NewEncoder(body).Encode(filter); err != nil {
 			return nil, err
 		}
 		data, err := c.do("POST", "/api/search/metadata", body)
@@ -98,7 +95,7 @@ func (c *Client) SearchAssetsByPerson(personID string) ([]string, error) {
 		if err := json.Unmarshal(data, &resp); err != nil {
 			return nil, fmt.Errorf("decode response: %w", err)
 		}
-		slog.Debug("search page", "person_id", personID, "page", page, "items", len(resp.Assets.Items))
+		slog.Debug("search page", "page", page, "items", len(resp.Assets.Items))
 		for _, a := range resp.Assets.Items {
 			ids = append(ids, a.ID)
 		}
@@ -114,8 +111,12 @@ func (c *Client) SearchAssetsByPerson(personID string) ([]string, error) {
 	return ids, nil
 }
 
+func (c *Client) SearchAssetsByPerson(personID string) ([]string, error) {
+	return c.searchAssetIDs(searchMetadataRequest{PersonIDs: []string{personID}})
+}
+
 func (c *Client) ListAlbums() ([]Album, error) {
-	data, err := c.do("GET", "/api/albums?withoutAssets=true", nil)
+	data, err := c.do("GET", "/api/albums", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -128,19 +129,15 @@ func (c *Client) ListAlbums() ([]Album, error) {
 }
 
 func (c *Client) GetAlbumAssetIDs(albumID string) (map[string]struct{}, error) {
-	data, err := c.do("GET", "/api/albums/"+albumID, nil)
+	ids, err := c.searchAssetIDs(searchMetadataRequest{AlbumIDs: []string{albumID}})
 	if err != nil {
 		return nil, err
 	}
-	var resp albumDetailResponse
-	if err := json.Unmarshal(data, &resp); err != nil {
-		return nil, fmt.Errorf("decode response: %w", err)
+	set := make(map[string]struct{}, len(ids))
+	for _, id := range ids {
+		set[id] = struct{}{}
 	}
-	ids := make(map[string]struct{}, len(resp.Assets))
-	for _, a := range resp.Assets {
-		ids[a.ID] = struct{}{}
-	}
-	return ids, nil
+	return set, nil
 }
 
 func (c *Client) AddAssetsToAlbum(albumID string, assetIDs []string) error {

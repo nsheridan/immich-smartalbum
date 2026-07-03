@@ -71,8 +71,6 @@ func processAlbum(cfg albumConfig, nameToID map[string]string, client *immich.Cl
 		}
 	}
 
-	// Fetch existing album asset IDs. GET /api/albums/{id} returns all assets in
-	// one response with no pagination - should be ok for most album sizes.
 	existing, err := client.GetAlbumAssetIDs(albumID)
 	if err != nil {
 		ar.Err = fmt.Errorf("get album assets: %w", err)
